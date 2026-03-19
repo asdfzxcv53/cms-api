@@ -1,91 +1,187 @@
+# 📘 Contents CRUD API
 
-# 2026 신입 Back-End 개발자 코딩 과제 - 간단한 CMS REST API
+## 📌 1. 프로젝트 소개
+JWT 인증 기반의 콘텐츠 관리 API 서버입니다.  
+사용자는 콘텐츠를 생성, 조회, 수정, 삭제할 수 있으며, 작성자 또는 관리자 권한에 따라 접근이 제어됩니다.
 
-2026년도 신입 Back-End 개발자 코딩 과제입니다.
-간단한 CMS(Contents Management System) REST API 를 구현하는 것이 목표입니다.
+또한, 콘텐츠 목록 조회 시 페이징 및 정렬 기능을 제공하여 효율적인 데이터 조회를 지원합니다.
 
-외부 자료 검색 및 AI 도구 사용을 허용합니다. 다만, 제출물에 활용한 도구와 방식을 간단하게 명시해주시기 바랍니다.
+---
 
-## Spec
+## 🚀 2. 실행 방법
 
-- Java 25
-- Spring Boot 4
-- Spring Security
-- JPA
-- H2 (db)
-- Lombok (필요시)
+### 📋 요구 사항
+- Java 17 이상
+- Gradle
+- H2 Database (내장 DB 사용)
 
-## 과제 목표
+---
 
-- 간단한 CMS 콘텐츠 관리 API 를 구현 해주세요.
-- DB Schema 모두 구현해주세요.
-- DB 는 h2 를 사용해주세요.
-- 가능한 예외처리도 구현해주세요.
-- 필요하다고 생각되는 부분은 추가로 구현해도 됩니다.
+### ▶️ 실행 방법
 
-## 데이터 모델
+./gradlew bootRun
 
-### Contents
+또는 IDE에서 Application 클래스를 실행합니다.
 
-| 컬럼명                | 이름  | 설명          | 데이터 타입                      | 비고 |
-|--------------------|-----|-------------|-----------------------------|----|
-| id                 | 아이디 | 고유 아이디      | bigint primary key not null |    |
-| title              | 제목  | contents 제목 | varchar(100) not null       |    |
-| description        | 내용  | contents 내용 | text                        |    |
-| view_count         | 조회수 | 조회수         | bigint not null             |    |
-| created_date       | 생성일 | 생성한 날짜      | timestamp                   |    |
-| created_by         | 생성자 | 생성한 사용자     | varchar(50) not null        |    |
-| last_modified_date | 수정일 | 마지막 수정일     | timestamp                   |    |
-| last_modified_by   | 수정자 | 마지막 수정한 사용자 | varchar(50)                 |    |
+---
 
-## 구현 기능
+### 🌐 접속 주소
 
-### 콘텐츠 관련 CRUD
+- 서버: http://localhost:8080
+- Swagger UI: http://localhost:8080/swagger-ui/index.html
+- OpenAPI 문서(JSON): http://localhost:8080/v3/api-docs
 
-시스템에 등록된 콘텐츠에 대한 CRUD 를 필수로 구현해주세요.
+---
 
-#### 기능
-- 콘텐츠 추가
-- 콘텐츠 목록 조회
-  - 반드시 페이징 처리를 해주세요.
-- 콘텐츠 상세 조회
+## 🛠️ 3. 기술 스택
+
+- Language: Java
+- Framework: Spring Boot
+- Security: Spring Security, JWT
+- ORM: JPA (EntityManager, JPQL)
+- Database: H2
+- API 문서화: Swagger (springdoc-openapi)
+
+---
+
+## 📂 4. 프로젝트 구조
+
+com.malgn
+├── content        # 콘텐츠 도메인 (Controller, Service, Repository)
+├── configure      # 설정 (Swagger, Security 등)
+├── exception      # 전역 예외 처리
+├── members        # 사용자 관련 기능
+
+---
+
+## ⚙️ 5. 구현 기능
+
+### 🔐 인증 / 사용자
+- 회원가입
+- 로그인 (JWT 발급)
+- 인증 기반 API 접근 제어
+
+---
+
+### 📝 콘텐츠 기능
+- 콘텐츠 생성
 - 콘텐츠 수정
 - 콘텐츠 삭제
+- 콘텐츠 상세 조회
+- 콘텐츠 목록 조회 (페이징 처리)
 
+---
 
-### 로그인
-- Spring Security 를 이용해서 로그인을 필수로 구현해주세요.
-- 로그인 방식은 자유롭게 선택하여 구현하되, `README.md` 에 명시해주세요
-- Role
-    - 관리자(ADMIN)
-    - 사용자(USER)
+### 📊 페이징 및 정렬
+- offset 기반 페이징 처리
+- 정렬 기준 선택 가능
+  - id (기본)
+  - viewCount (조회수)
+  - createdDate (생성일)
 
-### 접근 권한
+---
 
-- 접근 권한을 필수로 구현해주세요.
-- 콘텐츠 생성자 본인만 수정 + 삭제 가능하게 구현해주세요.
-- 단, 관리자(ADMIN) 인 경우 모든 콘텐츠에 대해 수정 + 삭제할 수 있게 구현해주세요.
+## 🔒 6. 권한 처리
 
-## 제출
+콘텐츠 수정 및 삭제는 다음 조건을 만족해야 합니다.
 
-### 기한
+- 작성자 본인
+- 또는 ADMIN 권한 사용자
 
-- 본 메일 수신 후 26.03.09(월) 오후 3시까지 (주)맑은기술 채용 메일(recruit@malgn.com) 로 보내주시기 바랍니다. 
+작성자 == 로그인 사용자 OR ROLE_ADMIN
 
-### 제출물
+권한이 없는 경우 403 Forbidden 응답을 반환합니다.
 
-- 소스코드 (Zip 또는 Github repository 링크)
-- README.md
-    - 추가 내용이나 제출물 관련 내용을 추가헤주세요.
-    - 사용한 AI 또는 참고 자료가 있다면 간단히 명시
-- REST API Docs
-    - 자유롭게 작성해서 첨부해주세요.
+---
 
+## ❗ 7. 예외 처리
 
+@RestControllerAdvice를 사용하여 전역 예외를 처리하고,  
+모든 에러 응답을 동일한 형식으로 반환합니다.
 
+### ErrorResponse 형식
 
+{
+"code": "ERROR_CODE",
+"message": "에러 메시지"
+}
 
+### 주요 예외
 
+VALIDATION_ERROR (400) : 요청 값 검증 실패  
+BAD_CREDENTIALS (401) : 로그인 실패  
+CONTENT_NOT_FOUND (404) : 콘텐츠 없음  
+CONTENT_MODIFY_NO_PERMISSION (403) : 권한 없음  
+DATABASE_ERROR (409) : DB 제약조건 오류
 
+---
 
+## 📡 8. REST API 문서
 
+Swagger UI를 통해 API 명세를 확인할 수 있습니다.
+
+- Swagger UI: http://localhost:8080/swagger-ui/index.html
+- OpenAPI JSON: http://localhost:8080/v3/api-docs
+
+---
+
+### 주요 API
+
+POST   /content         : 콘텐츠 생성  
+PUT    /content/{id}    : 콘텐츠 수정  
+DELETE /content/{id}    : 콘텐츠 삭제  
+GET    /content         : 콘텐츠 목록 조회 (페이징)  
+GET    /content/{id}    : 콘텐츠 상세 조회
+
+---
+
+## 📥 9. 요청 예시
+
+콘텐츠 목록 조회
+
+GET /content?page=1&size=10&sortBy=viewCount&direction=desc
+
+---
+
+콘텐츠 생성
+
+{
+"title": "제목",
+"description": "내용"
+}
+
+---
+
+## 📈 10. 추가 구현 사항
+
+- Swagger(OpenAPI) 기반 API 문서화
+- JWT 인증 시스템 구현
+- GlobalExceptionHandler를 통한 예외 처리 통일
+- offset 기반 페이징 처리
+- 정렬 기준 동적 처리 (JPQL)
+- 권한 기반 접근 제어 (작성자 / 관리자)
+
+---
+
+## 🤖 11. 사용한 AI 도구 / 참고 자료
+
+- ChatGPT: API 설계, 예외 처리 구조, README 작성 보조
+- Spring 공식 문서
+- Hibernate / JPA 공식 문서
+- Swagger (springdoc-openapi) 공식 문서
+
+---
+
+## 💡 12. 설계 포인트
+
+- Entity는 setter 대신 행위 메서드(update) 사용
+- Service 계층에서 비즈니스 로직 및 권한 검증 처리
+- Controller는 요청/응답 처리 역할만 담당
+- DTO를 통해 Entity 노출 방지
+
+---
+
+## 📌 13. 한 줄 요약
+
+JWT 인증 기반으로 콘텐츠를 관리하며,  
+페이징/정렬/권한 제어까지 고려한 REST API 서버입니다.
