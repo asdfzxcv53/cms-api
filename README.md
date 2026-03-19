@@ -10,12 +10,6 @@ JWT 인증 기반의 콘텐츠 관리 API 서버입니다.
 
 ## 🚀 2. 실행 방법
 
-### 📋 요구 사항
-- Java 17 이상
-- Gradle
-- H2 Database (내장 DB 사용)
-
----
 
 ### ▶️ 실행 방법
 
@@ -33,10 +27,20 @@ JWT 인증 기반의 콘텐츠 관리 API 서버입니다.
 
 ---
 
+### 🚀 프로젝트 실행 방법
+
+- 서버 실행 후 Swagger UI 로 접속
+- 회원가입과 로그인 API를 수행
+- 로그인 응답으로 받은 jwt 를 오른쪽 위 Authorize 에 토큰 입력
+- 그 후 인증이 필요한 API 테스트 진행
+
+---
+
 ## 🛠️ 3. 기술 스택
 
-- Language: Java
-- Framework: Spring Boot
+- Language: Java 25
+- Build Tool : Gradle 9.0
+- Framework: Spring Boot 4.x
 - Security: Spring Security, JWT
 - ORM: JPA (EntityManager, JPQL)
 - Database: H2
@@ -46,10 +50,10 @@ JWT 인증 기반의 콘텐츠 관리 API 서버입니다.
 
 ## 📂 4. 프로젝트 구조
 
-com.malgn
-├── content        # 콘텐츠 도메인 (Controller, Service, Repository)
-├── configure      # 설정 (Swagger, Security 등)
-├── exception      # 전역 예외 처리
+com.malgn\
+├── content        # 콘텐츠 도메인 (Controller, Service, Repository)\
+├── configure      # 설정 (Swagger, Security 등)\
+├── exception      # 전역 예외 처리\
 ├── members        # 사용자 관련 기능
 
 ---
@@ -106,14 +110,6 @@ com.malgn
 "message": "에러 메시지"
 }
 
-### 주요 예외
-
-VALIDATION_ERROR (400) : 요청 값 검증 실패  
-BAD_CREDENTIALS (401) : 로그인 실패  
-CONTENT_NOT_FOUND (404) : 콘텐츠 없음  
-CONTENT_MODIFY_NO_PERMISSION (403) : 권한 없음  
-DATABASE_ERROR (409) : DB 제약조건 오류
-
 ---
 
 ## 📡 8. REST API 문서
@@ -125,7 +121,7 @@ Swagger UI를 통해 API 명세를 확인할 수 있습니다.
 
 ---
 
-### 주요 API
+## 9. 주요 API
 
 POST   /content         : 콘텐츠 생성  
 PUT    /content/{id}    : 콘텐츠 수정  
@@ -135,53 +131,19 @@ GET    /content/{id}    : 콘텐츠 상세 조회
 
 ---
 
-## 📥 9. 요청 예시
-
-콘텐츠 목록 조회
-
-GET /content?page=1&size=10&sortBy=viewCount&direction=desc
-
----
-
-콘텐츠 생성
-
-{
-"title": "제목",
-"description": "내용"
-}
-
----
 
 ## 📈 10. 추가 구현 사항
 
 - Swagger(OpenAPI) 기반 API 문서화
 - JWT 인증 시스템 구현
 - GlobalExceptionHandler를 통한 예외 처리 통일
-- offset 기반 페이징 처리
 - 정렬 기준 동적 처리 (JPQL)
-- 권한 기반 접근 제어 (작성자 / 관리자)
+- 정렬 기준에 따른 인덱싱
 
 ---
 
-## 🤖 11. 사용한 AI 도구 / 참고 자료
+## 🤖 11. 사용한 AI 도구
 
-- ChatGPT: API 설계, 예외 처리 구조, README 작성 보조
-- Spring 공식 문서
-- Hibernate / JPA 공식 문서
-- Swagger (springdoc-openapi) 공식 문서
+- ChatGPT: API 설계 검증, 예외 처리 구조, README 작성 보조
 
 ---
-
-## 💡 12. 설계 포인트
-
-- Entity는 setter 대신 행위 메서드(update) 사용
-- Service 계층에서 비즈니스 로직 및 권한 검증 처리
-- Controller는 요청/응답 처리 역할만 담당
-- DTO를 통해 Entity 노출 방지
-
----
-
-## 📌 13. 한 줄 요약
-
-JWT 인증 기반으로 콘텐츠를 관리하며,  
-페이징/정렬/권한 제어까지 고려한 REST API 서버입니다.
