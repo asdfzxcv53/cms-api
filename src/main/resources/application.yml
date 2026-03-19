@@ -13,7 +13,7 @@ spring:
     init:
       mode: embedded
       schema-locations: classpath:db/sql/h2-schema.sql
-      data-locations: classpath:db/sql/h2-data.sql
+      ##data-locations: classpath:db/sql/h2-data.sql
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:test

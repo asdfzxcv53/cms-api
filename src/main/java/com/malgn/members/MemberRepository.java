@@ -4,6 +4,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public class MemberRepository {
 
@@ -26,5 +29,16 @@ public class MemberRepository {
                 .getSingleResult();
 
         return count > 0;
+    }
+
+    public Optional<Member> findByUsername(String username){
+        List<Member> result = em.createQuery(
+                "select m from Member m where m.username = :username",
+                Member.class
+        )
+                .setParameter("username", username)
+                .getResultList();
+
+        return result.stream().findFirst();
     }
 }
