@@ -22,6 +22,7 @@ JWT 인증 기반의 콘텐츠 관리 API 서버입니다.
 ### 🌐 접속 주소
 
 - 서버: http://localhost:8080
+- H2 DB: http://localhost:8080/h2-console
 - Swagger UI: http://localhost:8080/swagger-ui/index.html
 - OpenAPI 문서(JSON): http://localhost:8080/v3/api-docs
 
@@ -31,8 +32,18 @@ JWT 인증 기반의 콘텐츠 관리 API 서버입니다.
 
 - 서버 실행 후 Swagger UI 로 접속
 - 회원가입과 로그인 API를 수행
+- admin 계정 - id : admin , password : 1234
+- user 계정 - id : user , password : 1234
+- user 계정으로 20개의 컨텐츠 삽입되어있다
 - 로그인 응답으로 받은 jwt 를 오른쪽 위 Authorize 에 토큰 입력
 - 그 후 인증이 필요한 API 테스트 진행
+- ---
+- H2 DB 는 위 H2 console url 로 진입
+- driver-class-name: org.h2.Driver
+- url: jdbc:h2:mem:test
+- username: sa
+- password: (빈칸)
+- 위와 같이 설정후 connect 하여 DB 접속 가능
 
 ---
 
