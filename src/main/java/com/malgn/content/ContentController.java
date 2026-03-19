@@ -115,7 +115,7 @@ public class ContentController {
             description = "컨텐츠를 삭제합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "컨텐츠 삭제 성공"),
+            @ApiResponse(responseCode = "204", description = "컨텐츠 삭제 성공"),
             @ApiResponse(responseCode = "404", description = "컨텐츠를 찾을 수 없음",
                 content = @Content(
                         schema = @Schema(implementation = ErrorResponse.class)
