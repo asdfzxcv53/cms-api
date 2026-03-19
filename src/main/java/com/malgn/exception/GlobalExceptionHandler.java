@@ -3,6 +3,7 @@ package com.malgn.exception;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -37,5 +38,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(401)
                 .body(new ErrorResponse("BAD_CREDENTIALS", e.getMessage()));
+    }
+
+    // valid 에서 예외 발생할 때
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        return ResponseEntity
+                .status(400)
+                .body(new ErrorResponse("VALIDATION_ERROR", e.getMessage()));
     }
 }

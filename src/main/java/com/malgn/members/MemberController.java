@@ -26,54 +26,20 @@ public class MemberController {
             summary = "회원가입",
             description = "username 과 password 로 회원가입"
     )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "회원가입 성공",
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원가입 성공",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = MemberResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                    {
-                                     "id": 1,
-                                     "name": "song",
-                                     "username": "testuser"
-                                    }
-                                    """
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "잘못된 요청입니다.",
+                            schema = @Schema(implementation = MemberResponse.class)
+                    )),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다.",
                     content = @Content(
-                            schema = @Schema(implementation = ErrorResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                            "code": "...",
-                                            "message": "..."
-                                            }
-                                            """
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "409",
-                    description = "이미 존재하는 아이디 입니다.",
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    )),
+            @ApiResponse(responseCode = "409", description = "이미 존재하는 아이디 입니다.",
                     content = @Content(
-                    schema = @Schema(implementation = ErrorResponse.class),
-                    examples = @ExampleObject(
-                            value = """
-                                            {
-                                            "code": "...",
-                                            "message": "..."
-                                            }
-                                            """
-                    )
-            )
-            )
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    ))
     })
     @PostMapping(value = "/signup")
     public ResponseEntity<MemberResponse> signup(@RequestBody MemberSignUpRequest memberSignUpRequest) {
@@ -88,37 +54,16 @@ public class MemberController {
             summary = "아이디 중복확인",
             description = "username 으로 중복확인"
     )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "true 면 아이디 생성 가능, false 면 아이디 중복",
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "true 면 아이디 생성 가능, false 면 아이디 중복",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = CheckUsernameResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                    {
-                                     "available": "true / false"
-                                    }
-                                    """
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "409",
-                    description = "이미 존재하는 아이디 입니다.",
+                            schema = @Schema(implementation = CheckUsernameResponse.class)
+                    )),
+            @ApiResponse(responseCode = "409", description = "이미 존재하는 아이디 입니다.",
                     content = @Content(
-                            schema = @Schema(implementation = ErrorResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                            "code": "...",
-                                            "message": "..."
-                                            }
-                                            """
-                            )
-                    )
-            )
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    ))
     })
     @GetMapping(value = "/check-username")
     public ResponseEntity<CheckUsernameResponse> checkUsername(@RequestParam String username) {
