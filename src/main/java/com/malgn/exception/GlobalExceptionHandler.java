@@ -12,6 +12,7 @@ import javax.xml.crypto.Data;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // DB 제약조건 위반
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
         return ResponseEntity
@@ -19,6 +20,7 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse("DATABASE_ERROR", "데이터 오류입니다."));
     }
 
+    // 회원가입 시 username 중복 발생
     @ExceptionHandler(DuplicateUsernameException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateUsernameException(DuplicateUsernameException e) {
         return ResponseEntity
@@ -26,6 +28,7 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse("USERNAME_DUPLICATE", e.getMessage()));
     }
 
+    // 로그인 또는 사용자 조회 시 username 없음
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException e) {
         return ResponseEntity
@@ -33,6 +36,7 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse("USERNAME_NOT_FOUND", e.getMessage()));
     }
 
+    // 로그인시 비밀번호 불일치 -> username 이 없어도 보안을 위해 던져짐
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException e) {
         return ResponseEntity
@@ -48,10 +52,19 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse("VALIDATION_ERROR", e.getMessage()));
     }
 
+    // 컨텐츠를 찾을 수 없을때
     @ExceptionHandler(ContentNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleContentNotFoundException(ContentNotFoundException e) {
         return ResponseEntity
                 .status(404)
                 .body(new ErrorResponse("CONTENT_NOT_FOUND", e.getMessage()));
+    }
+
+    // 컨텐츠 수정, 삭제 권한이 없을때
+    @ExceptionHandler(ContentModifyNoPermissionException.class)
+    public ResponseEntity<ErrorResponse> handleContentModifyNoPermissionException(ContentModifyNoPermissionException e) {
+        return ResponseEntity
+                .status(403)
+                .body(new ErrorResponse("CONTENT_MODIFY_NO_PERMISSION", e.getMessage()));
     }
 }

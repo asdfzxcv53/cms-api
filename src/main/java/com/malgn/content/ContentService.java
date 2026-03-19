@@ -1,14 +1,12 @@
 package com.malgn.content;
 
-import com.malgn.exception.ContentCreatorMismatchException;
+import com.malgn.exception.ContentModifyNoPermissionException;
 import com.malgn.exception.ContentNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.nio.file.AccessDeniedException;
 
 @Service
 @Transactional
@@ -47,9 +45,9 @@ public class ContentService {
 
         String loginUsername = getLoginUser();
 
-        // 현재 로그인 유저와 컨텐츠의 생성자와 다르거나 admin 이 아니면 exception
+        // 권한 체크
         if(!content.getCreatedBy().equals(loginUsername) && !isAdmin()) {
-            throw new ContentCreatorMismatchException("컨텐츠를 수정하실 수 없습니다.");
+            throw new ContentModifyNoPermissionException("컴텐츠를 수정할 권한이 없습니다.");
         }
 
         content.update(
@@ -67,6 +65,20 @@ public class ContentService {
                 .lastModifiedDate(content.getLastModifiedDate())
                 .lastModifiedBy(content.getLastModifiedBy())
                 .build();
+    }
+
+    public void delete(Long id) {
+        Content content = contentRepository.findById(id)
+                .orElseThrow(() -> new ContentNotFoundException("컨텐츠가 없습니다."));
+
+        String loginUsername = getLoginUser();
+
+        // 권한 체크
+        if(!content.getCreatedBy().equals(loginUsername) && !isAdmin()){
+            throw new ContentModifyNoPermissionException("컨텐츠를 삭제할 권한이 없습니다.");
+        }
+
+        contentRepository.delete(content);
     }
 
     private String getLoginUser() {

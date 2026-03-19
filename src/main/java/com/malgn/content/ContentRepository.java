@@ -21,4 +21,8 @@ public class ContentRepository {
     public Optional<Content> findById(Long id) {
         return Optional.ofNullable(em.find(Content.class, id));
     }
+
+    public void delete(Content content){
+        em.remove(content);
+    }
 }
