@@ -4,6 +4,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public class ContentRepository {
 
@@ -16,5 +18,7 @@ public class ContentRepository {
         return content;
     }
 
-
+    public Optional<Content> findById(Long id) {
+        return Optional.ofNullable(em.find(Content.class, id));
+    }
 }

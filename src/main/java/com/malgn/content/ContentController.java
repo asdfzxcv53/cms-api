@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/content")
@@ -30,7 +27,7 @@ public class ContentController {
             description = "새로운 컨텐츠를 생성합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "콘텐츠 생성 성공",
+            @ApiResponse(responseCode = "200", description = "컨텐츠 생성 성공",
                     content = @Content(
                             schema = @Schema(implementation = ContentResponse.class)
                     )),
@@ -42,6 +39,32 @@ public class ContentController {
     @PostMapping
     public ResponseEntity<ContentResponse> create(@Valid @RequestBody ContentCreateRequest contentCreateRequest) {
         ContentResponse contentResponse = contentService.create(contentCreateRequest);
+
+        return ResponseEntity.ok(contentResponse);
+    }
+
+
+    @Operation(
+            summary = "컨텐츠 변경",
+            description = "컨텐츠를 변경합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "컨텐츠 변경 성공",
+                content = @Content(
+                        schema = @Schema(implementation = ContentResponse.class)
+                )),
+            @ApiResponse(responseCode = "404", description = "컨텐츠를 찾을 수 없음",
+                content = @Content(
+                        schema = @Schema(implementation = ErrorResponse.class)
+                )),
+            @ApiResponse(responseCode = "403", description = "수정 권한 없음",
+                content = @Content(
+                        schema = @Schema(implementation = ErrorResponse.class)
+                ))
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<ContentResponse> update(@PathVariable Long id, @Valid @RequestBody ContentUpdateRequest contentUpdateRequest) {
+        ContentResponse contentResponse = contentService.update(id, contentUpdateRequest);
 
         return ResponseEntity.ok(contentResponse);
     }

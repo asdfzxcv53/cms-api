@@ -21,6 +21,8 @@ public class AppConfiguration {
                         .title("Contents crud API")
                         .description("JWT 인증 API 문서")
                         .version("v1"))
+                .addSecurityItem(new io.swagger.v3.oas.models.security.SecurityRequirement()
+                        .addList("bearerAuth"))
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth",
                                 new SecurityScheme()

@@ -47,4 +47,11 @@ public class GlobalExceptionHandler {
                 .status(400)
                 .body(new ErrorResponse("VALIDATION_ERROR", e.getMessage()));
     }
+
+    @ExceptionHandler(ContentNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleContentNotFoundException(ContentNotFoundException e) {
+        return ResponseEntity
+                .status(404)
+                .body(new ErrorResponse("CONTENT_NOT_FOUND", e.getMessage()));
+    }
 }
