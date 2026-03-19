@@ -1,4 +1,4 @@
-package com.malgn.configure.auth;
+package com.malgn.auth;
 
 import lombok.Getter;
 

@@ -21,4 +21,7 @@ create table contents
     created_by         varchar(50)                not null,
     last_modified_date timestamp,
     last_modified_by   varchar(50)
-)
+);
+
+create index idx_content_view_count on contents(view_count);
+create index idx_content_created_date on contents(created_date);

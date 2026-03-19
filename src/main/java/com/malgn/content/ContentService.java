@@ -8,6 +8,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional
 public class ContentService {
@@ -28,15 +31,38 @@ public class ContentService {
 
         Content savedContent = contentRepository.save(content);
 
-        return ContentResponse.builder()
-                .id(savedContent.getId())
-                .title(savedContent.getTitle())
-                .description(savedContent.getDescription())
-                .createdDate(savedContent.getCreatedDate())
-                .createdBy(savedContent.getCreatedBy())
-                .lastModifiedDate(savedContent.getLastModifiedDate())
-                .lastModifiedBy(savedContent.getLastModifiedBy())
+        return toResponse(savedContent);
+    }
+
+    // 페이징 처리를 위한 page 와 size 를 받고 정렬기준 (시간, 조회수, id), 정렬방향을 받는다.
+    public ContentPageResponse findAll(int page, int size, String sortBy, String direction){
+        validatePageAndSize(page, size);
+
+        int offset = (page - 1) * size;
+        List<Content> contents = contentRepository.findAll(offset, size, sortBy, direction);
+        long totalCount = contentRepository.count();
+
+        List<ContentResponse> contentResponses = contents.stream()
+                .map(this::toResponse)
+                .toList();
+
+        int totalPage = (int) Math.ceil(totalCount / (double) size);
+
+        return ContentPageResponse.builder()
+                .page(page)
+                .size(size)
+                .totalCount(totalCount)
+                .totalPages(totalPage)
+                .contents(contentResponses)
                 .build();
+    }
+
+    public ContentResponse findById(long id) {
+        Content content = contentRepository.findById(id)
+                .orElseThrow(() -> new ContentNotFoundException("컨텐츠가 없습니다."));
+
+        return toResponse(content);
+
     }
 
     public ContentResponse update(Long id, ContentUpdateRequest contentUpdateRequest) {
@@ -56,16 +82,9 @@ public class ContentService {
                 getLoginUser()
         );
 
-        return ContentResponse.builder()
-                .id(content.getId())
-                .title(content.getTitle())
-                .description(content.getDescription())
-                .createdDate(content.getCreatedDate())
-                .createdBy(content.getCreatedBy())
-                .lastModifiedDate(content.getLastModifiedDate())
-                .lastModifiedBy(content.getLastModifiedBy())
-                .build();
+        return toResponse(content);
     }
+
 
     public void delete(Long id) {
         Content content = contentRepository.findById(id)
@@ -97,5 +116,27 @@ public class ContentService {
                 .anyMatch(
                         auth -> auth.getAuthority().equals("ROLE_ADMIN")
                 );
+    }
+
+    private void validatePageAndSize(int page, int size) {
+        if (page < 1) {
+            throw new IllegalArgumentException("page 는 1 이상이어야 합니다.");
+        }
+        if (size < 1) {
+            throw new IllegalArgumentException("size 는 1 이상이어야 합니다.");
+        }
+    }
+
+    private ContentResponse toResponse(Content content) {
+        return ContentResponse.builder()
+                .id(content.getId())
+                .title(content.getTitle())
+                .description(content.getDescription())
+                .viewCount(content.getViewCount())
+                .createdDate(content.getCreatedDate())
+                .createdBy(content.getCreatedBy())
+                .lastModifiedDate(content.getLastModifiedDate())
+                .lastModifiedBy(content.getLastModifiedBy())
+                .build();
     }
 }

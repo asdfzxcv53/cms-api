@@ -45,6 +45,43 @@ public class ContentController {
 
 
     @Operation(
+            summary = "컨텐츠 목록 조회",
+            description = "컨텐츠 목록을 페이징하여 조회합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "컨텐츠 목록 조회 성공")
+    })
+    @GetMapping
+    public ResponseEntity<ContentPageResponse> findAll(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdDate") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction
+    ) {
+        ContentPageResponse contentPageResponse = contentService.findAll(page, size, sortBy, direction);
+        return ResponseEntity.ok(contentPageResponse);
+    }
+
+
+    @Operation(
+            summary = "컨텐츠 상세 조회",
+            description = "컨텐츠 ID로 상세 정보를 조회합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "컨텐츠 상세 조회 성공",
+                content = @Content(schema = @Schema(implementation = ContentResponse.class))),
+            @ApiResponse(responseCode = "404", description = "컨텐츠를 찾을 수 없습니다.",
+                content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<ContentResponse> findById(@PathVariable Long id) {
+        ContentResponse response = contentService.findById(id);
+
+        return ResponseEntity.ok(response);
+    }
+
+
+    @Operation(
             summary = "컨텐츠 변경",
             description = "컨텐츠를 변경합니다."
     )
@@ -63,7 +100,10 @@ public class ContentController {
                 ))
     })
     @PutMapping("/{id}")
-    public ResponseEntity<ContentResponse> update(@PathVariable Long id, @Valid @RequestBody ContentUpdateRequest contentUpdateRequest) {
+    public ResponseEntity<ContentResponse> update(
+            @PathVariable Long id,
+            @Valid @RequestBody ContentUpdateRequest contentUpdateRequest
+    ) {
         ContentResponse contentResponse = contentService.update(id, contentUpdateRequest);
 
         return ResponseEntity.ok(contentResponse);

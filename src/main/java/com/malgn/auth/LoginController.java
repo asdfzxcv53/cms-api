@@ -1,4 +1,4 @@
-package com.malgn.configure.auth;
+package com.malgn.auth;
 
 import com.malgn.exception.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
