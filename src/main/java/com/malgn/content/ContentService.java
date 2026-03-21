@@ -61,6 +61,8 @@ public class ContentService {
         Content content = contentRepository.findById(id)
                 .orElseThrow(() -> new ContentNotFoundException("컨텐츠가 없습니다."));
 
+        content.increaseViewCount();
+
         return toResponse(content);
 
     }
