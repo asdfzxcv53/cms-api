@@ -13,12 +13,12 @@ JWT 인증 기반의 콘텐츠 관리 API 서버입니다.
 
 ### ▶️ 실행 방법
 
-터미널에서
-mac, Linux ./gradlew bootRun
-window - ./gradlew.bat bootRun
-intelliJ 터미널이라면 .\gradlew.bat bootRun
+- 터미널에서
+- mac, Linux ./gradlew bootRun
+- window - ./gradlew.bat bootRun
+- intelliJ 터미널이라면 .\gradlew.bat bootRun
 
-또는 IDE에서 Application 클래스를 실행합니다.
+- 또는 IDE에서 Application 클래스를 실행합니다.
 
 ---
 
